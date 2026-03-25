@@ -1,5 +1,5 @@
-Package: EnsembleRandomForest_GMs
-Title: EnsembleRandomForest_GMs
+Package: EnsembleRandomForests
+Title: Ensemble Random Forests
 Version: 1.3.0
 Authors@R: 
     person("Zachary", "Siders", , "zachary.siders@gmail.com", role = c("aut", "cre"),
