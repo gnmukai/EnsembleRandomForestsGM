@@ -80,7 +80,6 @@ rf_ens_fn <- function(v, form, max_split, weights=FALSE, ntree=100, mtry=5, impo
 		                    sampsize=rep(max_split,
 		                                 nlevels(v[,var])))
 	}else{
-		print("rf_ens_fn line 78")
 		mod <- randomForest(form, 
 		                    data=train_ens, 
 		                    ntree=ntree, 
@@ -92,9 +91,13 @@ rf_ens_fn <- function(v, form, max_split, weights=FALSE, ntree=100, mtry=5, impo
 	}
 
 	#predictions
+	#preds <- as.data.frame(predict(mod, 
+	#                               newdata=v, 
+	#                               type='prob'))
 	preds <- as.data.frame(predict(mod, 
 	                               newdata=v, 
-	                               type='prob'))
+	                               type="response"))
+	
 	colnames(preds) <- paste0('P.',colnames(preds))
 	preds$PRES <- v[,var]
 	preds$type <- 'train'
@@ -105,9 +108,12 @@ rf_ens_fn <- function(v, form, max_split, weights=FALSE, ntree=100, mtry=5, impo
 		roc_train <- rocr_ens(preds[preds$type=='train',2], preds$PRES[preds$type=='train'])
 		roc_test <- rocr_ens(preds[preds$type=='test',2], preds$PRES[preds$type=='test'])
 	}else{
+		#roc_train <- lapply(1:nlevels(v[,var]),function(x) rocr_ens(preds[preds$type=='train',x], as.integer(preds$PRES[preds$type=='train']==levels(v[,var])[x])))
+		#roc_test <- lapply(1:nlevels(v[,var]),function(x) rocr_ens(preds[preds$type=='test',x], as.integer(preds$PRES[preds$type=='test']==levels(v[,var])[x])))
 		roc_train <- lapply(1:nlevels(v[,var]),function(x) rocr_ens(preds[preds$type=='train',x], as.integer(preds$PRES[preds$type=='train']==levels(v[,var])[x])))
 		roc_test <- lapply(1:nlevels(v[,var]),function(x) rocr_ens(preds[preds$type=='test',x], as.integer(preds$PRES[preds$type=='test']==levels(v[,var])[x])))
-	}
+
+						   }
 	
 
 	pack <- list(mod = mod, 
