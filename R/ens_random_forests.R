@@ -176,11 +176,11 @@ ens_random_forests <- function(df, var, covariates, header=NULL, out.folder=NULL
 		             mu.tr.perf = c(#trAUC=rowMeans(pred_ens_trAUC),
 		                             trRMSE=rowMeans(pred_ens_trRMSE),
 		                             #trTSS=rowMeans(pred_ens_trTSS)),
-						 			trR2 <- rowMeans(pred_ens_trR2))
+						 			trR2 = rowMeans(pred_ens_trR2))
 		             mu.te.perf = c(#teAUC=rowMeans(pred_ens_teAUC),
 		                             teRMSE=rowMeans(pred_ens_teRMSE),
 		                             #teTSS=rowMeans(pred_ens_teTSS)),
-						 			 teR2 <- rowMeans(pred_ens_teR2))
+						 			 teR2 = rowMeans(pred_ens_teR2))
 		             roc_train = lapply(rf.ens, function(x)x$roc_train),
 		             roc_test = lapply(rf.ens, function(x)x$roc_test),
 		             pred = list(p = pred_ens_p,
