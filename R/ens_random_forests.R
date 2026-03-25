@@ -162,8 +162,7 @@ ens_random_forests <- function(df, var, covariates, header=NULL, out.folder=NULL
 			#pred_ens_teTSS <- sapply(rf.ens, function(x) {sapply(x$roc_test, function(y) y$tss)})
 			# Generate ensemble predictions
 			print("line 164")	
-			print(pred_ens_p)
-				pred_ens <- as.data.frame(sapply(pred_ens_p, rowMeans))
+				pred_ens <- as.data.frame(rowMeans(pred_ens_p))
 				#colnames(pred_ens) <- paste0('P.',1:nlevels(v[,var]))
 				pred_ens$PRES <- v[,var]
 				rownames(pred_ens) <- rownames(v)	
