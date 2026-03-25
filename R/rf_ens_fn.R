@@ -97,7 +97,7 @@ rf_ens_fn <- function(v, form, max_split, weights=FALSE, ntree=100, mtry=5, impo
 	preds <- as.data.frame(predict(mod, 
 	                               newdata=v, 
 	                               type="response"))
-	
+	print(preds)
 	colnames(preds) <- paste0('P.',colnames(preds))
 	preds$PRES <- v[,var]
 	preds$type <- 'train'
@@ -110,8 +110,8 @@ rf_ens_fn <- function(v, form, max_split, weights=FALSE, ntree=100, mtry=5, impo
 	}else{
 		#roc_train <- lapply(1:nlevels(v[,var]),function(x) rocr_ens(preds[preds$type=='train',x], as.integer(preds$PRES[preds$type=='train']==levels(v[,var])[x])))
 		#roc_test <- lapply(1:nlevels(v[,var]),function(x) rocr_ens(preds[preds$type=='test',x], as.integer(preds$PRES[preds$type=='test']==levels(v[,var])[x])))
-		roc_train <- lapply(1:nlevels(v[,var]),function(x) rocr_ens(preds[preds$type=='train',x], as.integer(preds$PRES[preds$type=='train']==levels(v[,var])[x])))
-		roc_test <- lapply(1:nlevels(v[,var]),function(x) rocr_ens(preds[preds$type=='test',x], as.integer(preds$PRES[preds$type=='test']==levels(v[,var])[x])))
+		roc_train <- rocr_ens(preds[preds$type=='train',2], as.integer(preds$PRES[preds$type=='train']))
+		roc_test <-  rocr_ens(preds[preds$type=='test',2], as.integer(preds$PRES[preds$type=='test']))
 
 						   }
 	
