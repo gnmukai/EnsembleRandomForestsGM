@@ -120,5 +120,6 @@ rf_ens_fn <- function(v, form, max_split, weights=FALSE, ntree=100, mtry=5, impo
 	             preds = preds 
 	             #roc_train = roc_train, 
 	             #roc_test = roc_test)
+				 )
 	return(pack)
 }
