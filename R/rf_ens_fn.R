@@ -104,21 +104,21 @@ rf_ens_fn <- function(v, form, max_split, weights=FALSE, ntree=100, mtry=5, impo
 	preds$rf.ID <- 1:nrow(v)
 	preds$type[preds$rf.ID %in% test_ens$rf.ID] <- 'test'
 	preds <- preds[,-grep('rf.ID',colnames(preds))]
-	if(nlevels(v[,var])==2){
-		roc_train <- rocr_ens(preds[preds$type=='train',2], preds$PRES[preds$type=='train'])
-		roc_test <- rocr_ens(preds[preds$type=='test',2], preds$PRES[preds$type=='test'])
-	}else{
+	#if(nlevels(v[,var])==2){
+		#roc_train <- rocr_ens(preds[preds$type=='train',2], preds$PRES[preds$type=='train'])
+		#roc_test <- rocr_ens(preds[preds$type=='test',2], preds$PRES[preds$type=='test'])
+	#}else{
 		#roc_train <- lapply(1:nlevels(v[,var]),function(x) rocr_ens(preds[preds$type=='train',x], as.integer(preds$PRES[preds$type=='train']==levels(v[,var])[x])))
 		#roc_test <- lapply(1:nlevels(v[,var]),function(x) rocr_ens(preds[preds$type=='test',x], as.integer(preds$PRES[preds$type=='test']==levels(v[,var])[x])))
-		roc_train <- rocr_ens(preds[preds$type=='train',2], as.integer(preds$PRES[preds$type=='train']))
-		roc_test <-  rocr_ens(preds[preds$type=='test',2], as.integer(preds$PRES[preds$type=='test']))
+		#roc_train <- rocr_ens(preds[preds$type=='train',2], as.integer(preds$PRES[preds$type=='train']))
+		#roc_test <-  rocr_ens(preds[preds$type=='test',2], as.integer(preds$PRES[preds$type=='test']))
 
-						   }
+						   #}
 	
 
 	pack <- list(mod = mod, 
-	             preds = preds, 
-	             roc_train = roc_train, 
-	             roc_test = roc_test)
+	             preds = preds 
+	             #roc_train = roc_train, 
+	             #roc_test = roc_test)
 	return(pack)
 }
