@@ -80,8 +80,9 @@ rf_ens_fn <- function(v, form, max_split, weights=FALSE, ntree=100, mtry=5, impo
 		                    ntree=ntree, 
 		                    mtry=mtry, 
 		                    importance=TRUE, 
-		                    sampsize=rep(max_split,
-		                                 nlevels(v[,var])))
+							sampsize=0.6*nrow(train_ens))
+		                    #sampsize=rep(max_split,
+		                    #             nlevels(v[,var])))
 	}
 
 	#predictions
