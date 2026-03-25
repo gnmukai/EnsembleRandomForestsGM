@@ -148,31 +148,39 @@ ens_random_forests <- function(df, var, covariates, header=NULL, out.folder=NULL
 	             pred = list(p = pred_ens_p,
 	                         resid = pred_ens_resid))
 		}else{
-			pred_ens_p <- lapply(1:nlevels(v[,var]), function(y) {sapply(rf.ens, function(x) x$preds[,y])})
-			pred_ens_resid <- lapply(1:nlevels(v[,var]), function(y) {sapply(rf.ens, function(x) (as.integer(x$preds$PRES==levels(v[,var])[y]) - x$preds[,y]))})
-			pred_ens_trAUC <- sapply(rf.ens, function(x) {sapply(x$roc_train, function(y) y$auc)})
-			pred_ens_teAUC <- sapply(rf.ens, function(x) {sapply(x$roc_test, function(y) y$auc)})
-			pred_ens_trRMSE <- sapply(rf.ens, function(x) {sapply(x$roc_train, function(y) y$auc)})
-			pred_ens_teRMSE <- sapply(rf.ens, function(x) {sapply(x$roc_test, function(y) y$rmse)})
-			pred_ens_trTSS <- sapply(rf.ens, function(x) {sapply(x$roc_train, function(y) y$tss)})
-			pred_ens_teTSS <- sapply(rf.ens, function(x) {sapply(x$roc_test, function(y) y$tss)})
+			print(rf.ens)
+			print(dim(rf.ens))
+			pred_ens_p <- sapply(rf.ens, function(x) x$preds[,2])
+			pred_ens_resid <- sapply(rf.ens, function(x) ((x$preds$PRES) - x$preds[,2]))
+			#pred_ens_trAUC <- sapply(rf.ens, function(x) {sapply(x$roc_train, function(y) y$auc)})
+			#pred_ens_teAUC <- sapply(rf.ens, function(x) {sapply(x$roc_test, function(y) y$auc)})
+			pred_ens_trRMSE <- sapply(rf.ens, function(x) ( rmse(x$preds[preds$type=='train',"PRES"], x$preds[preds$type=='train',2]) ))
+			pred_ens_teRMSE <- sapply(rf.ens, function(x) ( rmse(x$preds[preds$type=='test',"PRES"], x$preds[preds$type=='test',2]) ))
+			pred_ens_trR2 <- sapply(rf.ens, function(x) ( cor(x$preds[preds$type=='train',"PRES"], x$preds[preds$type=='train',2])^2 ))
+			pred_ens_teR2 <- sapply(rf.ens, function(x) ( cor(x$preds[preds$type=='test',"PRES"], x$preds[preds$type=='test',2])^2 ))									  
+			#pred_ens_trTSS <- sapply(rf.ens, function(x) {sapply(x$roc_train, function(y) y$tss)})
+			#pred_ens_teTSS <- sapply(rf.ens, function(x) {sapply(x$roc_test, function(y) y$tss)})
 			# Generate ensemble predictions
 				pred_ens <- as.data.frame(sapply(pred_ens_p, rowMeans))
-				colnames(pred_ens) <- paste0('P.',1:nlevels(v[,var]))
+				#colnames(pred_ens) <- paste0('P.',1:nlevels(v[,var]))
 				pred_ens$PRES <- v[,var]
 				rownames(pred_ens) <- rownames(v)	
 			#ROC on ensemble
-				roc_ens <- lapply(1:nlevels(v[,var]),function(x) rocr_ens(pred_ens[,x], as.integer(pred_ens$PRES==levels(v[,var])[x])))
+				#roc_ens <- lapply(1:nlevels(v[,var]),function(x) rocr_ens(pred_ens[,x], as.integer(pred_ens$PRES==levels(v[,var])[x])))
+			# RMSE and R2 on ensemble
+				#rr_ens <- 
 			pack <- list(data = v, 
 		             model = rf.ens, 
 		             ens.pred = pred_ens,
-		             ens.perf = roc_ens,
-		             mu.tr.perf = c(trAUC=rowMeans(pred_ens_trAUC),
+		             #ens.perf = roc_ens,
+		             mu.tr.perf = c(#trAUC=rowMeans(pred_ens_trAUC),
 		                             trRMSE=rowMeans(pred_ens_trRMSE),
-		                             trTSS=rowMeans(pred_ens_trTSS)),
-		             mu.te.perf = c(teAUC=rowMeans(pred_ens_teAUC),
+		                             #trTSS=rowMeans(pred_ens_trTSS)),
+						 			trR2 <- rowMeans(pred_ens_trR2))
+		             mu.te.perf = c(#teAUC=rowMeans(pred_ens_teAUC),
 		                             teRMSE=rowMeans(pred_ens_teRMSE),
-		                             teTSS=rowMeans(pred_ens_teTSS)),
+		                             #teTSS=rowMeans(pred_ens_teTSS)),
+						 			 teR2 <- rowMeans(pred_ens_teR2))
 		             roc_train = lapply(rf.ens, function(x)x$roc_train),
 		             roc_test = lapply(rf.ens, function(x)x$roc_test),
 		             pred = list(p = pred_ens_p,
