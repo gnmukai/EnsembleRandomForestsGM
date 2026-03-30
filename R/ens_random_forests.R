@@ -189,12 +189,12 @@ ens_random_forests <- function(df, var, covariates, header=NULL, out.folder=NULL
 		                         resid = pred_ens_resid))
 		}
 	# Get variable importance
-		print(sapply(rf.ens, function(x) x$mod$importanceSD))	 
+		#print(sapply(rf.ens, function(x) x$mod$importanceSD))	 
 		if(importance){
 			mu_imp <- sapply(rf.ens, function(x) x$mod$importance[,1])
-			print(mu_imp)
+			#print(mu_imp)
 			sd_imp <- sapply(rf.ens, function(x) x$mod$importanceSD)
-			print(sd_imp)
+			#print(sd_imp)
 			sd_imp[sd_imp==0] <- 1 #fix 0's
 			var_ens <- abs(mu_imp/sd_imp)
 			var_ens_df <- as.data.frame(t(apply(var_ens, 1, quantile, prob=var.q)))
