@@ -85,7 +85,8 @@ rf_ens_fn <- function(v, form, max_split, weights=FALSE, ntree=100, mtry=5, impo
 		                    ntree=ntree, 
 		                    mtry=mtry, 
 		                    importance=TRUE, 
-							sampsize=0.6*nrow(train_ens))
+							sampsize=0.6*nrow(train_ens),
+						    nodesize = 1)
 		                    #sampsize=rep(max_split,
 		                    #             nlevels(v[,var])))
 	}
